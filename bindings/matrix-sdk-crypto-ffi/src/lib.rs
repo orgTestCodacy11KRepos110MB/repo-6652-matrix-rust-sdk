@@ -468,7 +468,7 @@ pub struct DecryptedEvent {
 
 /// Struct representing the state of our private cross signing keys, it shows
 /// which private cross signing keys we have locally stored.
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, uniffi::Record)]
 pub struct CrossSigningStatus {
     /// Do we have the master key.
     pub has_master: bool,
@@ -586,7 +586,7 @@ mod uniffi_types {
         error::CryptoStoreError,
         machine::OlmMachine,
         responses::Request,
-        BackupKeys, RoomKeyCounts,
+        BackupKeys, CrossSigningStatus, RoomKeyCounts,
     };
 }
 
