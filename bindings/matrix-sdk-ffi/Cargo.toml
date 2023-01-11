@@ -31,7 +31,7 @@ serde_json = { workspace = true }
 thiserror = { workspace = true }
 tokio = { version = "1", features = ["rt-multi-thread", "macros"] }
 tokio-stream = "0.1.8"
-uniffi = { workspace = true }
+uniffi = { workspace = true, features = ["tokio"] }
 uniffi_macros = { workspace = true }
 
 
