@@ -43,7 +43,7 @@ use tracing::{
 };
 
 use super::{
-    event_item::{BundledReactions, Sticker, TimelineDetails},
+    event_item::{BundledReactions, Profile, Sticker, TimelineDetails},
     find_event_by_id, find_event_by_txn_id, find_read_marker, EventTimelineItem, Message,
     TimelineInnerMetadata, TimelineItem, TimelineItemContent, TimelineKey, VirtualTimelineItem,
 };
@@ -88,6 +88,7 @@ impl Flow {
 
 pub(super) struct TimelineEventMetadata {
     pub(super) sender: OwnedUserId,
+    pub(super) sender_profile: Profile,
     pub(super) is_own_event: bool,
     pub(super) relations: BundledRelations,
     pub(super) encryption_info: Option<EncryptionInfo>,
@@ -455,6 +456,7 @@ impl<'a, 'i> TimelineEventHandler<'a, 'i> {
             key: self.flow.to_key(),
             event_id: None,
             sender: self.meta.sender.to_owned(),
+            sender_profile: self.meta.sender_profile.clone(),
             content,
             reactions,
             timestamp: self.flow.timestamp(),
