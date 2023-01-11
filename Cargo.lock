@@ -4400,6 +4400,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "74233d3b3b2f6d4b006dc19dee745e73e2a6bfb6f93607cd3b02bd5b00797d7c"
 
 [[package]]
+name = "siphasher"
+version = "0.3.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7bd3e3206899af3f8b12af284fafc038cc1dc2b41d1b89dd17297221c5d225de"
+
+[[package]]
 name = "slab"
 version = "0.4.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5112,8 +5118,8 @@ checksum = "f962df74c8c05a667b5ee8bcf162993134c104e96440b663c8daa176dc772d8c"
 
 [[package]]
 name = "uniffi"
-version = "0.21.0"
-source = "git+https://github.com/mozilla/uniffi-rs?rev=249a78b6f3f35661f1530e53811134e1bf012608#249a78b6f3f35661f1530e53811134e1bf012608"
+version = "0.22.0"
+source = "git+https://github.com/Hywan/uniffi-rs?rev=8e33c075f08024db42a7b9f60533f9be579841b1#8e33c075f08024db42a7b9f60533f9be579841b1"
 dependencies = [
  "anyhow",
  "bytes",
@@ -5127,8 +5133,8 @@ dependencies = [
 
 [[package]]
 name = "uniffi_bindgen"
-version = "0.21.0"
-source = "git+https://github.com/mozilla/uniffi-rs?rev=249a78b6f3f35661f1530e53811134e1bf012608#249a78b6f3f35661f1530e53811134e1bf012608"
+version = "0.22.0"
+source = "git+https://github.com/Hywan/uniffi-rs?rev=8e33c075f08024db42a7b9f60533f9be579841b1#8e33c075f08024db42a7b9f60533f9be579841b1"
 dependencies = [
  "anyhow",
  "askama",
@@ -5151,8 +5157,8 @@ dependencies = [
 
 [[package]]
 name = "uniffi_build"
-version = "0.21.0"
-source = "git+https://github.com/mozilla/uniffi-rs?rev=249a78b6f3f35661f1530e53811134e1bf012608#249a78b6f3f35661f1530e53811134e1bf012608"
+version = "0.22.0"
+source = "git+https://github.com/Hywan/uniffi-rs?rev=8e33c075f08024db42a7b9f60533f9be579841b1#8e33c075f08024db42a7b9f60533f9be579841b1"
 dependencies = [
  "anyhow",
  "camino",
@@ -5160,9 +5166,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "uniffi_checksum_derive"
+version = "0.22.0"
+source = "git+https://github.com/Hywan/uniffi-rs?rev=8e33c075f08024db42a7b9f60533f9be579841b1#8e33c075f08024db42a7b9f60533f9be579841b1"
+dependencies = [
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "uniffi_macros"
-version = "0.21.0"
-source = "git+https://github.com/mozilla/uniffi-rs?rev=249a78b6f3f35661f1530e53811134e1bf012608#249a78b6f3f35661f1530e53811134e1bf012608"
+version = "0.22.0"
+source = "git+https://github.com/Hywan/uniffi-rs?rev=8e33c075f08024db42a7b9f60533f9be579841b1#8e33c075f08024db42a7b9f60533f9be579841b1"
 dependencies = [
  "bincode",
  "camino",
@@ -5179,16 +5194,18 @@ dependencies = [
 
 [[package]]
 name = "uniffi_meta"
-version = "0.21.0"
-source = "git+https://github.com/mozilla/uniffi-rs?rev=249a78b6f3f35661f1530e53811134e1bf012608#249a78b6f3f35661f1530e53811134e1bf012608"
+version = "0.22.0"
+source = "git+https://github.com/Hywan/uniffi-rs?rev=8e33c075f08024db42a7b9f60533f9be579841b1#8e33c075f08024db42a7b9f60533f9be579841b1"
 dependencies = [
  "serde",
+ "siphasher",
+ "uniffi_checksum_derive",
 ]
 
 [[package]]
 name = "uniffi_testing"
-version = "0.21.0"
-source = "git+https://github.com/mozilla/uniffi-rs?rev=249a78b6f3f35661f1530e53811134e1bf012608#249a78b6f3f35661f1530e53811134e1bf012608"
+version = "0.22.0"
+source = "git+https://github.com/Hywan/uniffi-rs?rev=8e33c075f08024db42a7b9f60533f9be579841b1#8e33c075f08024db42a7b9f60533f9be579841b1"
 dependencies = [
  "anyhow",
  "camino",
@@ -5487,7 +5504,7 @@ dependencies = [
 [[package]]
 name = "weedle2"
 version = "4.0.0"
-source = "git+https://github.com/mozilla/uniffi-rs?rev=249a78b6f3f35661f1530e53811134e1bf012608#249a78b6f3f35661f1530e53811134e1bf012608"
+source = "git+https://github.com/Hywan/uniffi-rs?rev=8e33c075f08024db42a7b9f60533f9be579841b1#8e33c075f08024db42a7b9f60533f9be579841b1"
 dependencies = [
  "nom",
 ]
