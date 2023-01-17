@@ -34,11 +34,10 @@ uniffi = { workspace = true }
 uniffi_macros = { workspace = true }
 zeroize = { workspace = true }
 
-
 [target.'cfg(target_os = "android")'.dependencies]
 tracing = { version = "0.1.29", default-features = false, features = ["log"] }
 android_logger = "0.11"
-log-panics = { version = "2", features = ["with-backtrace"]}
+log-panics = { version = "2", features = ["with-backtrace"] }
 
 [target.'cfg(not(target_os = "android"))'.dependencies]
 tracing = { workspace = true }
@@ -49,12 +48,12 @@ path = "../../crates/matrix-sdk"
 default-features = false
 features = [
     "anyhow",
-    "experimental-timeline",
     "experimental-sliding-sync",
-    "markdown", 
-    "socks",
+    "experimental-timeline",
     "e2e-encryption",
+    "markdown", 
     "sled",
+    "socks",
     "rustls-tls",
 ]
 
@@ -63,12 +62,11 @@ path = "../../crates/matrix-sdk"
 default-features = false
 features = [
     "anyhow",
-    "experimental-timeline",
-    "markdown",
     "experimental-sliding-sync",
-    "socks",
+    "experimental-timeline",
     "e2e-encryption",
-    "automatic-room-key-forwarding",
-    "sled",
+    "markdown",
     "native-tls",
+    "sled",
+    "socks",
 ]
