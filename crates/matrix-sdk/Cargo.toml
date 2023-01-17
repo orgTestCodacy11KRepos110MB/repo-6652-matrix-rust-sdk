@@ -18,12 +18,14 @@ rustdoc-args = ["--cfg", "docsrs"]
 [features]
 default = [
     "e2e-encryption",
+    "automatic-room-key-forwarding",
     "sled",
     "native-tls",
 ]
 
 e2e-encryption = [
     "matrix-sdk-base/e2e-encryption",
+    "matrix-sdk-base/automatic-room-key-forwarding",
     "matrix-sdk-sled?/crypto-store",          # activate crypto-store on sled if given
     "matrix-sdk-indexeddb?/e2e-encryption",   # activate on indexeddb if given
 ]
@@ -33,6 +35,7 @@ sled = ["dep:matrix-sdk-sled", "matrix-sdk-sled?/state-store"]
 indexeddb = ["dep:matrix-sdk-indexeddb"]
 
 qrcode = ["e2e-encryption", "matrix-sdk-base/qrcode"]
+automatic-room-key-forwarding = ["e2e-encryption", "matrix-sdk-base/automatic-room-key-forwarding"]
 markdown = ["ruma/markdown"]
 native-tls = ["reqwest/native-tls"]
 rustls-tls = ["reqwest/rustls-tls"]
