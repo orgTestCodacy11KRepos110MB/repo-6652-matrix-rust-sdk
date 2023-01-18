@@ -311,7 +311,7 @@ impl ProfileProvider for room::Common {
     }
 
     async fn profile(&self, user_id: &UserId) -> Profile {
-        match self.get_member_no_sync(user_id).await {
+        match self.get_member(user_id).await {
             Ok(Some(member)) => Profile {
                 display_name: member.display_name().map(ToOwned::to_owned),
                 display_name_ambiguous: member.name_ambiguous(),
