@@ -318,9 +318,13 @@ enum LocalTrust {
 };
 
 enum VerificationState {
-    "Trusted",
-    "Untrusted",
+    "Verified",
+    "SignedDeviceOfUnverifiedUser",
+    "UnSignedDeviceOfVerifiedUser",
+    "UnSignedDevice",
     "UnknownDevice",
+    "UnsafeSource",
+    "Mismatch",
 };
 
 enum EventEncryptionAlgorithm {
