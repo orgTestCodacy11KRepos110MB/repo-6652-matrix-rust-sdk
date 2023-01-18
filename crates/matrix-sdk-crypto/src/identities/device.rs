@@ -163,6 +163,57 @@ impl Device {
         } else if let Some(SigningKey::Ed25519(key)) =
             session.signing_keys.get(&DeviceKeyAlgorithm::Ed25519)
         {
+            // Room keys are received as an `m.room.encrypted` event using the `m.olm`
+            // algorithm. Upon decryption of the `m.room.encrypted` event, the
+            // decrypted content will contain also a `Ed25519` public key.
+            //
+            // The inclusion of this key means that the `Curve25519` key of the `Device` and
+            // Olm `Session`, established using the DH authentication of the
+            // double ratchet, is pointing at the `Ed25519` key of the `Device`
+            //
+            // On the other hand, the `Ed25519` key is pointing at the `Curve25519` key
+            // using a signature which is uploaded to the server as
+            // `device_keys` and downloaded by us using a `/keys/query` request.
+            //
+            // A `Device` is considered to be the owner of a room key iff:
+            //     1. The `Curve25519` key that was used to establish the Olm `Session`
+            //        that was used to decrypt the event is pointing at the `Ed25519`key
+            //        of this `Device`
+            //     2. The `Ed25519` key of this device has signed a `device_keys` object
+            //        that contains the `Curve25519` key from step 1.
+            //
+            // We don't need to check the signature of the `Device` here, since we don't
+            // accept a `Device` unless it has a valid `Ed25519` signature.
+            //
+            // We do check that the `Curve25519` that was used to decrypt the event carrying
+            // the `m.room_key` and the `Ed25519` key that was part of the
+            // decrypted content matches the keys found in this `Device`.
+            //
+            // ```text
+            //                                              ┌───────────────────────┐
+            //                                              │ EncryptedToDeviceEvent│
+            //                                              └───────────────────────┘
+            //                                                         │
+            //    ┌──────────────────────────────────┐                 │
+            //    │              Device              │                 ▼
+            //    ├──────────────────────────────────┤        ┌──────────────────┐
+            //    │            Device Keys           │        │      Session     │
+            //    ├────────────────┬─────────────────┤        ├──────────────────┤
+            //    │   Ed25519 Key  │  Curve25519 Key │◄──────►│  Cruve25519 Key  │
+            //    └────────────────┴─────────────────┘        └──────────────────┘
+            //            ▲                                            │
+            //            │                                            │
+            //            │                                            │ Decrypt
+            //            │                                            │
+            //            │                                            ▼
+            //            │                                 ┌───────────────────────┐
+            //            │                                 │  DecryptedOlmV1Event  │
+            //            │                                 ├───────────────────────┤
+            //            │                                 │         keys          │
+            //            │                                 ├───────────────────────┤
+            //            └────────────────────────────────►│       Ed25519 Key     │
+            //                                              └───────────────────────┘
+            // ```
             self.ed25519_key().map(|k| k == *key).unwrap_or(false)
                 && self.curve25519_key().map(|k| k == session.sender_key).unwrap_or(false)
         } else {
