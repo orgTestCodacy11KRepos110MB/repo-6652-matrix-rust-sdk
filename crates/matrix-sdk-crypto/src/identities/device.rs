@@ -165,12 +165,12 @@ impl Device {
             // This could mean a couple of things:
             //      1. We received the room key as a `m.forwarded_room_key`
             //      2. We imported the room key through a file export.
-            //      3. We imoprted the room key through a backup.
+            //      3. We imported the room key through a backup.
             //
             // To be certain that a `Device` is the owner of a room key we need to have a
             // proof that the `Curve25519` key of this `Device` was used to
             // initially exchange the room key. This proof is provided by the Olm decryption
-            // step, see bellow for further clarification.
+            // step, see below for further clarification.
             //
             // Each of the above room key methods that receive room keys do not contain this
             // proof and we received only a claim that the room key is tied to a
