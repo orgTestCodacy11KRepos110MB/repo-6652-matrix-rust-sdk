@@ -158,33 +158,33 @@ impl Device {
     /// encrypted `m.room_key` event. This method determines if this `Device`
     /// can be confirmed as the creator and owner of the `m.room_key`.
     pub fn is_owner_of_session(&self, session: &InboundGroupSession) -> bool {
-        // An imported room key means that we did not receive the room key as a
-        // `m.room_key` event when the room key was initially exchanged.
-        //
-        // This could mean a couple of things:
-        //      1. We received the room key as a `m.forwarded_room_key`
-        //      2. We imported the room key through a file export.
-        //      3. We imoprted the room key through a backup.
-        //
-        // To be certain that a `Device` is the owner of a room key we need to have a
-        // proof that the `Curve25519` key of this `Device` was used to
-        // initially exchange the room key. This proof is provided by the Olm decryption
-        // step, see bellow for further clarification.
-        //
-        // Each of the above room key methods that receive room keys do not contain this
-        // proof and we received only a claim that the room key is tied to a
-        // `Curve25519` key.
-        //
-        // Since there's no way to verify that the claim is true, we say that we don't
-        // know that the room key belongs to this device.
         if session.has_been_imported() {
+            // An imported room key means that we did not receive the room key as a
+            // `m.room_key` event when the room key was initially exchanged.
+            //
+            // This could mean a couple of things:
+            //      1. We received the room key as a `m.forwarded_room_key`
+            //      2. We imported the room key through a file export.
+            //      3. We imoprted the room key through a backup.
+            //
+            // To be certain that a `Device` is the owner of a room key we need to have a
+            // proof that the `Curve25519` key of this `Device` was used to
+            // initially exchange the room key. This proof is provided by the Olm decryption
+            // step, see bellow for further clarification.
+            //
+            // Each of the above room key methods that receive room keys do not contain this
+            // proof and we received only a claim that the room key is tied to a
+            // `Curve25519` key.
+            //
+            // Since there's no way to verify that the claim is true, we say that we don't
+            // know that the room key belongs to this device.
             false
         } else if let Some(SigningKey::Ed25519(key)) =
             session.signing_keys.get(&DeviceKeyAlgorithm::Ed25519)
         {
             // Room keys are received as an `m.room.encrypted` event using the `m.olm`
             // algorithm. Upon decryption of the `m.room.encrypted` event, the
-            // decrypted content will contain also a `Ed25519` public key.
+            // decrypted content will contain also a `Ed25519` public key[1].
             //
             // The inclusion of this key means that the `Curve25519` key of the `Device` and
             // Olm `Session`, established using the DH authentication of the
@@ -233,6 +233,8 @@ impl Device {
             //            └────────────────────────────────►│       Ed25519 Key     │
             //                                              └───────────────────────┘
             // ```
+            //
+            // [1]: https://spec.matrix.org/v1.5/client-server-api/#molmv1curve25519-aes-sha2
             self.ed25519_key().map(|k| k == *key).unwrap_or(false)
                 && self.curve25519_key().map(|k| k == session.sender_key).unwrap_or(false)
         } else {
