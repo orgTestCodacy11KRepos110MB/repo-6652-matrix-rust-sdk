@@ -1108,7 +1108,10 @@ impl OlmMachine {
                 } else {
                     // The user is not verified by us,
                     // and the device is not properly verified by him
-                    (VerificationState::UnSignedDevice, Some(device.device_id().to_owned()))
+                    (
+                        VerificationState::UnSignedDeviceOfUnverifiedUser,
+                        Some(device.device_id().to_owned()),
+                    )
                 }
             } else {
                 // mismatch of identity and fingerprint
@@ -2151,7 +2154,10 @@ pub(crate) mod tests {
 
         let encryption_info =
             bob.decrypt_room_event(&event, room_id).await.unwrap().encryption_info.unwrap();
-        assert_eq!(VerificationState::UnSignedDevice, encryption_info.verification_state);
+        assert_eq!(
+            VerificationState::UnSignedDeviceOfUnverifiedUser,
+            encryption_info.verification_state
+        );
 
         // mark the alice device as verified
         bob.get_device(alice.user_id(), alice_device_id(), None)
