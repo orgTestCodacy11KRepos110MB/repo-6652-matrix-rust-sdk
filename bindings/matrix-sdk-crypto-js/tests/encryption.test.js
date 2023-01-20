@@ -29,6 +29,7 @@ describe(EncryptionSettings.name, () => {
 
 describe('VerificationState', () => {
     test('has the correct variant values', () => {
+        expect(VerificationState.Verified).toStrictEqual(0);
         expect(VerificationState.SignedDeviceOfUnverifiedUser).toStrictEqual(1);
         expect(VerificationState.UnSignedDeviceOfVerifiedUser).toStrictEqual(2);
         expect(VerificationState.UnSignedDevice).toStrictEqual(3);
