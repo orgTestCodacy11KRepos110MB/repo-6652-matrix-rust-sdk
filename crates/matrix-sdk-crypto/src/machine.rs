@@ -2217,7 +2217,7 @@ pub(crate) mod tests {
         // We just need a fake session to export it
         // We will use the export to create various inbounds with other claimed
         // ownership
-        let id_keys = bob.identity_keys().clone();
+        let id_keys = bob.identity_keys();
         let fake_device_id = bob.device_id.clone();
         let olm = OutboundGroupSession::new(
             fake_device_id,
