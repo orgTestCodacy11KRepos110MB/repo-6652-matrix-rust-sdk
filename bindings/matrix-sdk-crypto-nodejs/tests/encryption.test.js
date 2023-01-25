@@ -35,6 +35,5 @@ describe('VerificationState', () => {
         expect(VerificationState.UnSignedDeviceOfUnverifiedUser).toStrictEqual(3);
         expect(VerificationState.UnknownDevice).toStrictEqual(4);
         expect(VerificationState.UnsafeSource).toStrictEqual(5);
-        expect(VerificationState.Mismatch).toStrictEqual(6);
     });
 });

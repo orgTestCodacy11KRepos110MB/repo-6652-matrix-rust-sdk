@@ -324,7 +324,6 @@ enum VerificationState {
     "UnSignedDeviceOfUnverifiedUser",
     "UnknownDevice",
     "UnsafeSource",
-    "Mismatch",
 };
 
 enum EventEncryptionAlgorithm {
