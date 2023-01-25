@@ -137,7 +137,7 @@ impl EventTimelineItem {
     }
 
     /// Get the profile of the sender.
-    pub fn sender_profile(&self) -> &Profile {
+    pub fn sender_profile(&self) -> &TimelineDetails<Profile> {
         match self {
             Self::Local(local_event) => &local_event.sender_profile,
             Self::Remote(remote_event) => &remote_event.sender_profile,
@@ -231,7 +231,7 @@ pub struct LocalEventTimelineItem {
     /// The sender of the event.
     pub sender: OwnedUserId,
     /// The sender's profile of the event.
-    pub sender_profile: Profile,
+    pub sender_profile: TimelineDetails<Profile>,
     /// The timestamp of the event.
     pub timestamp: MilliSecondsSinceUnixEpoch,
     /// The content of the event.
@@ -273,7 +273,7 @@ pub struct RemoteEventTimelineItem {
     /// The sender of the event.
     pub sender: OwnedUserId,
     /// The sender's profile of the event.
-    pub sender_profile: Profile,
+    pub sender_profile: TimelineDetails<Profile>,
     /// The timestamp of the event.
     pub timestamp: MilliSecondsSinceUnixEpoch,
     /// The content of the event.

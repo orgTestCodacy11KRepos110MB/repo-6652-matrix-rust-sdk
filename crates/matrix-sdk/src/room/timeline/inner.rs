@@ -402,7 +402,7 @@ impl TimelineInner {
 #[async_trait]
 pub(super) trait ProfileProvider {
     fn own_user_id(&self) -> &UserId;
-    async fn profile(&self, user_id: &UserId) -> Profile;
+    async fn profile(&self, user_id: &UserId) -> Option<Profile>;
 }
 
 #[async_trait]
@@ -411,8 +411,12 @@ impl ProfileProvider for room::Common {
         (**self).own_user_id()
     }
 
-    async fn profile(&self, user_id: &UserId) -> Profile {
-        match self.get_member_no_sync(user_id).await {
+    async fn profile(&self, user_id: &UserId) -> Option<Profile> {
+        if !self.are_members_synced() {
+            return None;
+        }
+
+        let profile = match self.get_member_no_sync(user_id).await {
             Ok(Some(member)) => Profile {
                 display_name: member.display_name().map(ToOwned::to_owned),
                 display_name_ambiguous: member.name_ambiguous(),
@@ -425,7 +429,8 @@ impl ProfileProvider for room::Common {
                 error!(%user_id, "Failed to getch room member information: {e}");
                 Profile { display_name: None, display_name_ambiguous: false, avatar_url: None }
             }
-        }
+        };
+        Some(profile)
     }
 }
 
