@@ -108,7 +108,7 @@ impl EventTimelineItem {
     /// of the send request that created the event.
     pub fn event_id(&self) -> Option<&EventId> {
         match self {
-            Self::Local(local_event) => local_event.event_id.as_deref(),
+            Self::Local(local_event) => local_event.event_id(),
             Self::Remote(remote_event) => Some(&remote_event.event_id),
         }
     }
@@ -194,7 +194,7 @@ impl EventTimelineItem {
 }
 
 /// This type represents the "send state" of a local event timeline item.
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum EventSendState {
     /// The local event has not been sent yet.
     NotSentYet,
@@ -202,7 +202,10 @@ pub enum EventSendState {
     /// sending has failed.
     SendingFailed,
     /// The local event has been sent successfully to the server.
-    Sent,
+    Sent {
+        /// The event ID assigned by the server.
+        event_id: OwnedEventId,
+    },
 }
 
 #[derive(Debug, Clone)]
@@ -211,8 +214,6 @@ pub struct LocalEventTimelineItem {
     pub send_state: EventSendState,
     /// The transaction ID.
     pub transaction_id: OwnedTransactionId,
-    /// The event ID received from the server in the event-sending response.
-    pub event_id: Option<OwnedEventId>,
     /// The sender of the event.
     pub sender: OwnedUserId,
     /// The sender's profile of the event.
@@ -224,24 +225,19 @@ pub struct LocalEventTimelineItem {
 }
 
 impl LocalEventTimelineItem {
-    /// Clone the current event item, and update its `event_id`.
+    /// Get the event ID of this item.
     ///
-    /// `event_id` is optional:
-    ///   * `Some(_)` means the local event has been sent successfully to the
-    ///     server, its send state will be moved to
-    ///     [`LocalEventTimelineItemSendState::Sent`].
-    ///   * `None` means the local event has been failed to be sent to the
-    ///     server, its send state will be moved to
-    ///     [`LocalEventTimelineItemSendState::SendingFailed`].
-    pub(super) fn with_event_id(&self, event_id: Option<OwnedEventId>) -> Self {
-        Self {
-            send_state: match &event_id {
-                Some(_) => EventSendState::Sent,
-                None => EventSendState::SendingFailed,
-            },
-            event_id,
-            ..self.clone()
+    /// Will be `Some` if and only if `send_state` is `EventSendState::Sent`.
+    pub fn event_id(&self) -> Option<&EventId> {
+        match &self.send_state {
+            EventSendState::Sent { event_id } => Some(event_id),
+            _ => None,
         }
+    }
+
+    /// Clone the current event item, and update its `send_state`.
+    pub(super) fn with_send_state(&self, send_state: EventSendState) -> Self {
+        Self { send_state, ..self.clone() }
     }
 }
 
