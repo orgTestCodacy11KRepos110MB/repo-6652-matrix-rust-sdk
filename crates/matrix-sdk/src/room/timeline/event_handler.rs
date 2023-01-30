@@ -42,9 +42,9 @@ use tracing::{debug, error, field::debug, info, instrument, trace, warn};
 
 use super::{
     event_item::{
-        AnyOtherFullStateEventContent, BundledReactions, LocalEventTimelineItem,
-        LocalEventTimelineItemSendState, MemberProfileChange, OtherState, Profile,
-        RemoteEventTimelineItem, RoomMembershipChange, Sticker, TimelineDetails,
+        AnyOtherFullStateEventContent, BundledReactions, EventSendState, LocalEventTimelineItem,
+        MemberProfileChange, OtherState, Profile, RemoteEventTimelineItem, RoomMembershipChange,
+        Sticker, TimelineDetails,
     },
     find_read_marker, rfind_event_by_id, rfind_event_item, EventTimelineItem, Message,
     TimelineInnerMetadata, TimelineItem, TimelineItemContent, VirtualTimelineItem,
@@ -510,7 +510,7 @@ impl<'a, 'i> TimelineEventHandler<'a, 'i> {
             match &self.flow {
                 Flow::Local { txn_id, timestamp } => {
                     EventTimelineItem::Local(LocalEventTimelineItem {
-                        send_state: LocalEventTimelineItemSendState::NotSentYet,
+                        send_state: EventSendState::NotSentYet,
                         transaction_id: txn_id.to_owned(),
                         event_id: None,
                         sender,
